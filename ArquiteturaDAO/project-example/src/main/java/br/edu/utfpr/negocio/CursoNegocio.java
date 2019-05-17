@@ -4,13 +4,13 @@ import java.util.List;
 
 import br.edu.utfpr.dao.CursoDAO;
 import br.edu.utfpr.dto.CursoDTO;
-import br.edu.utfpr.excecao.NomePaisJaExisteException;
+import br.edu.utfpr.excecao.AusenciaEmMenosDeTresDiasException;
 
 public class CursoNegocio {
 
-    public void incluir(CursoDTO curso) throws NomePaisJaExisteException {
+    public void incluir(CursoDTO curso) throws AusenciaEmMenosDeTresDiasException {
         if (this.listar().stream().anyMatch(p -> p.getNome().equalsIgnoreCase(curso.getNome())))
-            throw new NomePaisJaExisteException(curso.getNome());
+            throw new AusenciaEmMenosDeTresDiasException(curso.getNome());
 
         CursoDAO dao = new CursoDAO();
         dao.insereCurso(curso);

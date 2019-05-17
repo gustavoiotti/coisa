@@ -15,7 +15,7 @@ public class ProfessorDAO implements ProfessorDAOInterface {
     private Statement query;
     private String sql;
 
-    // Responsável por criar a tabela Cliente no banco.
+    // Responsável por criar a tabela Professor no banco.
     public ProfessorDAO() {
 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test2?user=root&password=admin")) {
@@ -25,8 +25,8 @@ public class ProfessorDAO implements ProfessorDAOInterface {
             "CREATE TABLE professor (" +
 						"id int NOT NULL GENERATED ALWAYS AS IDENTITY CONSTRAINT id_professor_pk PRIMARY KEY," +
 						"nome varchar(255)," +
-						"telefone varchar(30)," + 
-						"idade int,");
+                        "ra int," +
+                        "ativo boolean,");
 
 
 
@@ -38,14 +38,15 @@ public class ProfessorDAO implements ProfessorDAOInterface {
     @Override
     public boolean insereProfessor(ProfessorDTO professor) {
 
-        sql = "INSERT INTO professor VALUES (?, ?, ?, ?, ?, ?)";
+        sql = "INSERT INTO professor VALUES (?, ?, ?, ?)";
 
         try{
             PreparedStatement query = conn.prepareStatement(sql);
             query.setInt(1, professor.getIdProfessor());
             query.setString(2, professor.getNome());
-            query.setString(3, professor.getTelefone());
-            query.setInt(4, professor.getIdade());
+            query.setInt(3, professor.getRa());
+            query.setBoolean(4, professor.getAtivo());
+
 
             query.execute();
             query.close();
@@ -71,8 +72,8 @@ public class ProfessorDAO implements ProfessorDAOInterface {
             while(rs.next()){
                 professor.setIdProfessor(rs.getInt("idProfessor"));
                 professor.setNome(rs.getString("nome"));
-                professor.setTelefone(rs.getString("telefone"));
-                professor.setIdade(rs.getInt("idade"));
+                professor.setRa(rs.getInt("ra"));
+                professor.setAtivo(rs.getBoolean( "ativo"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,9 +92,9 @@ public class ProfessorDAO implements ProfessorDAOInterface {
             PreparedStatement query = conn.prepareStatement(sql);
             query.setInt(1, professor.getIdProfessor());
             query.setString(2, professor.getNome());
-            query.setString(3, professor.getTelefone());
-            query.setInt(4, professor.getIdade());
-            query.setInt(7, professor.getIdCliente());
+            query.setInt(3, professor.getRa());
+            query.setBoolean(4, professor.getAtivo());
+            query.setInt(5, professor.getIdProfessor());
 
             query.execute();
             query.close();
@@ -135,9 +136,8 @@ public class ProfessorDAO implements ProfessorDAOInterface {
             while(rs.next()){
                 professor.setIdProfessor(rs.getInt("idProfessor"));
                 professor.setNome(rs.getString("nome"));
-                professor.setTelefone(rs.getString("telefone"));
-
-                professor.setIdade(rs.getInt("idade"));
+                professor.setRa(rs.getInt("ra"));
+                professor.setAtivo(rs.getBoolean( "ativo"));
 
 
                 professores.add(professor);

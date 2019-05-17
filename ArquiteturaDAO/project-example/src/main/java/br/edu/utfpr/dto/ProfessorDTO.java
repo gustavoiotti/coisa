@@ -7,20 +7,28 @@ import br.edu.utfpr.excecao.NomeProfessorMenor5CaracteresException;
 @Data
 @Builder
 public class ProfessorDTO {
-    private int idProfessor;
+    /*private int idProfessor;
     private String nome;
     private int idade;
     private String telefone;
+    private String disciplina;
+    private CursoDTO curso;*/
+
+    private int idProfessor;
+    private String nome;
+    private int ra;
+    private Boolean ativo;
     private CursoDTO curso;
 
     public ProfessorDTO(){
     }
 
-    public ProfessorDTO(int idProfessor, String nome, int idade, String telefone,  CursoDTO curso) {
+    public ProfessorDTO(int idProfessor, String nome, int ra, Boolean ativo,  CursoDTO curso) {
         this.idProfessor = idProfessor;
         this.nome = nome;
-        this.idade = idade;
-        this.telefone = telefone;
+        this.ra = ra;
+        this.ativo = ativo;
+        //this.disciplina = disciplina;
         this.curso = curso;
     }
 

@@ -83,8 +83,8 @@ public class CursoDAO implements CursoDAOInterface {
             PreparedStatement query = conn.prepareStatement(sql);
             query.setInt(1, curso.getIdCurso());
             query.setString(2, curso.getNome());
-            query.setInt(4, curso.getCodigoDisciplina());
-            query.setInt(5, curso.getIdCurso());
+            query.setInt(3, curso.getCodigoDisciplina());
+            query.setInt(4, curso.getIdCurso());
 
             query.execute();
             query.close();
