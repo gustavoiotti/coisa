@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.List;
 
 @Log
-public abstract class DisciplinaDAO extends AbstractDAO<DisciplinaDTO> {
+public class DisciplinaDAO extends AbstractDAO<DisciplinaDTO> {
 
     public DisciplinaDAO() {
         try (Connection conn = DriverManager.getConnection("jdbc:derby:memory:database;create=true")) {

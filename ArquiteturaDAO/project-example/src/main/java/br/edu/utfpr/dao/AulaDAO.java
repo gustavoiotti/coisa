@@ -33,27 +33,25 @@ public class AulaDAO extends AbstractDAO {
         }
     }
 
+
     @Override
-    protected String getStringSQLIncluir() {
-        return "INSERT INTO aula (qtd, tipo, data) VALUES (?, ?, ?)";
+    protected String getStringSQLCreate()  {
+        return "INSERT INTO aula(qtd, tipo, data) VALUES (?, ?, ?)";
     }
 
     @Override
-    protected void mapeamentoObjetoRelationalIncluir(PreparedStatement statement, AulaDAO a) throws Exception {
-        statement.setInt(1, a.getId());
-        statement.setString(2, a.getQtd());
-        statement.setInt(3, a.getTipo());
-        statement.setDouble(4, a.getData());
-
+    protected void mappingCreate(PreparedStatement stmt, Object entity) throws Exception {
+        stmt.setInt(1, entity.getId());
+        stmt.setString(2, entity.getQtd());
+        stmt.setInt(3, entity.getTipo());
+        stmt.setDouble(4, entity.getData());
     }
 
     @Override
-    protected String getStringSQLListar() {
-        return "SELECT * FROM aula";
-    }
+    protected String getStringSQLList() { return "SELECT * FROM professor"; }
 
     @Override
-    protected AulaDAO populaObjetoListar(ResultSet result) throws Exception {
+    protected Object populateList(ResultSet result) throws Exception {
         return AulaDAO.builder()
                 .id(result.getInt("idAula"))
                 .qtd(result.getString("qtd"))
@@ -64,21 +62,20 @@ public class AulaDAO extends AbstractDAO {
     }
 
     @Override
-    protected String getStringSQLExcluir() {
+    protected String getStringSQLDelete() {
         return "DELETE FROM aula WHERE id=?";
     }
 
     @Override
-    protected String getStringSQLAlterar() {
-        return "UPDATE cliente SET qtd=?, tipo=?, WHERE id=?";
+    protected String getStringSQLUpdate() {
+        return "UPDATE professor SET qtd=?, tipo=?, data=? WHERE id=?";
     }
 
     @Override
-    protected void mapeamentoObjetoRelationalAlterar(PreparedStatement statement, AulaDAO a) throws Exception {
-        statement.setInt(1, a.getId());
-        statement.setString(2, a.getQtd());
-        statement.setInt(3, a.getTipo());
-        statement.setDouble(4, a.getData())
+    protected void mappingUpdate(PreparedStatement stmt, Object entity) throws Exception {
+        stmt.setInt(1, entity.getId());
+        stmt.setString(2, entity.getQtd());
+        stmt.setInt(3, entity.getTipo());
+        stmt.setDouble(4, entity.getData());
     }
-
 }

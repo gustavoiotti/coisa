@@ -1,5 +1,7 @@
 package br.edu.utfpr.dao;
 import br.edu.utfpr.dto.CmAusenciaDTO;
+import br.edu.utfpr.dto.CursoDTO;
+import br.edu.utfpr.dto.DisciplinaDTO;
 import lombok.extern.java.Log;
 
 import java.sql.*;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CmAusenciaDAO implements CmAusenciaDAOInterface{
+public class CmAusenciaDAO extends AbstractDAO{
     private Connection conn = null;
     private Statement query;
     private String sql;
@@ -31,37 +33,46 @@ public class CmAusenciaDAO implements CmAusenciaDAOInterface{
     }
 
     @Override
-    public boolean insereCmAusencia(CmAusenciaDTO cm) {
-
-        sql = "INSERT INTO professor VALUES (?, ?, ?)";
-
-        try{
-            PreparedStatement query = conn.prepareStatement(sql);
-            query.setInt(1, cm.getIdCm());
-            query.setString(2, cm.getData());
-            query.setInt(3, cm.getMotivo());
-
-
-            query.execute();
-            query.close();
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    protected String getStringSQLCreate()  {
+        return "INSERT INTO ausencia(data, motivo) VALUES (?, ?)";
     }
 
     @Override
-    public CmAusenciaDTO buscaCmAusencia(int idCm) {
-        return null;
+    protected void mappingCreate(PreparedStatement stmt, Object entity) throws Exception {
+        stmt.setInt(1, entity.getId());
+        stmt.setDate(2, entity.getData());
+        stmt.setString(3, entity.getMotivo());
+
     }
 
     @Override
-    public List<CmAusenciaDTO> listaTodos() {
-        return null;
+    protected String getStringSQLList() { return "SELECT * FROM ausencia"; }
+
+    @Override
+    protected Object populateList(ResultSet result) throws Exception {
+        return AulaDAO.builder()
+                .id(result.getInt("id"))
+                .qtd(result.getDate("data"))
+                .tipo(result.getString("motivo"))
+                .curso((CursoDTO. builder).id(result.getInt("idCurso")).build()).build()
+                .disciplina(DisciplinaDTO.builder().id(result.getInt("idDisciplina")).build())
+                .build();
     }
 
-    //Falta o Delete
+    @Override
+    protected String getStringSQLDelete() {
+        return "DELETE FROM ausencia WHERE id=?";
+    }
 
+    @Override
+    protected String getStringSQLUpdate() {
+        return "UPDATE ausencia SET data=?, motivo=? WHERE id=?";
+    }
+
+    @Override
+    protected void mappingUpdate(PreparedStatement stmt, Object entity) throws Exception {
+        stmt.setInt(1, entity.getId());
+        stmt.setDate(2, entity.getData());
+        stmt.setString(3, entity.getMotivo());
+    }
 }

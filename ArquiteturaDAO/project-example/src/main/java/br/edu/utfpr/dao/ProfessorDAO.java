@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public abstract class ProfessorDAO extends AbstractDAO<ProfessorDTO> {
+public class ProfessorDAO extends AbstractDAO<ProfessorDTO> {
 
     // Responsável por criar a tabela Professor no banco.
     public ProfessorDAO() {

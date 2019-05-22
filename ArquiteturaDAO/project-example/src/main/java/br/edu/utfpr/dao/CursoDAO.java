@@ -8,7 +8,7 @@ import br.edu.utfpr.dto.CursoDTO;
 import lombok.extern.java.Log;
 
 @Log
-public abstract class CursoDAO extends AbstractDAO<CursoDTO>{
+public class CursoDAO extends AbstractDAO<CursoDTO>{
 
     // Responsável por criar a tabela Curso no banco
     public CursoDAO() {

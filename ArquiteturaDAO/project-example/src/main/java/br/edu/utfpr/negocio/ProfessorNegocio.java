@@ -6,9 +6,19 @@ import br.edu.utfpr.dao.ProfessorDAO;
 import br.edu.utfpr.dto.ProfessorDTO;
 import br.edu.utfpr.excecao.NomeProfessorJaExisteException;
 
-public class ProfessorNegocio {
+public class ProfessorNegocio extends AbstractNegocio<ProfessorDTO> {
+    @Override
+    public void persistirEntidade(ProfessorDTO entidade) {
 
-    public void incluir(ProfessorDTO prof) throws NomeProfessorJaExisteException {
+    }
+
+    @Override
+    public List<ProfessorDTO> listar() {
+        return null;
+    }
+
+
+    /*public void incluir(ProfessorDTO prof) throws NomeProfessorJaExisteException {
 
         if (this.listar().stream().anyMatch(c -> c.getNome().equalsIgnoreCase(prof.getNome())))
             throw new NomeProfessorJaExisteException(prof.getNome());
@@ -38,5 +48,5 @@ public class ProfessorNegocio {
     public void remover(ProfessorDTO dto){
         ProfessorDAO dao = new ProfessorDAO();
         dao.deletaProfessor(dto);
-    }
+    }*/
 }

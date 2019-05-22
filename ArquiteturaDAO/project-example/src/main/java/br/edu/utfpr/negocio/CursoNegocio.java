@@ -6,9 +6,20 @@ import br.edu.utfpr.dao.CursoDAO;
 import br.edu.utfpr.dto.CursoDTO;
 import br.edu.utfpr.excecao.AusenciaEmMenosDeTresDiasException;
 
-public class CursoNegocio {
+public class CursoNegocio extends AbstractNegocio<CursoDTO> {
 
-    public void incluir(CursoDTO curso) throws AusenciaEmMenosDeTresDiasException {
+    @Override
+    public void persistirEntidade(CursoDTO entidade) {
+
+    }
+
+    @Override
+    public List<CursoDTO> listar() {
+
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /*public void incluir(CursoDTO curso) throws AusenciaEmMenosDeTresDiasException {
         if (this.listar().stream().anyMatch(p -> p.getNome().equalsIgnoreCase(curso.getNome())))
             throw new AusenciaEmMenosDeTresDiasException(curso.getNome());
 
@@ -35,6 +46,6 @@ public class CursoNegocio {
     public void remover(CursoDTO curso){
         CursoDAO dao = new CursoDAO();
         dao.deletaCurso(curso);
-    }
-
+    }*/
 }
+

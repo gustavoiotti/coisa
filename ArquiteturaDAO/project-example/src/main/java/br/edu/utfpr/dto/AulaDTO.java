@@ -9,6 +9,7 @@ public class AulaDTO {
     private  boolean tipo;
     private Date data;
     private CursoDTO c;
+    private ProfessorDTO p;
     private DisciplinaDTO d;
 
 }
