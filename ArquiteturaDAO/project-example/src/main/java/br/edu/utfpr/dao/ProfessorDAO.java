@@ -9,11 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log
-public class ProfessorDAO implements ProfessorDAOInterface {
-
-    private Connection conn = null;
-    private Statement query;
-    private String sql;
+public abstract class ProfessorDAO extends AbstractDAO<ProfessorDTO> {
 
     // Responsável por criar a tabela Professor no banco.
     public ProfessorDAO() {
@@ -26,9 +22,7 @@ public class ProfessorDAO implements ProfessorDAOInterface {
 						"id int NOT NULL GENERATED ALWAYS AS IDENTITY CONSTRAINT id_professor_pk PRIMARY KEY," +
 						"nome varchar(255)," +
                         "ra int," +
-                        "ativo boolean,");
-
-
+                        "estaAtivo boolean,");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,117 +30,47 @@ public class ProfessorDAO implements ProfessorDAOInterface {
     }
 
     @Override
-    public boolean insereProfessor(ProfessorDTO professor) {
-
-        sql = "INSERT INTO professor VALUES (?, ?, ?, ?)";
-
-        try{
-            PreparedStatement query = conn.prepareStatement(sql);
-            query.setInt(1, professor.getIdProfessor());
-            query.setString(2, professor.getNome());
-            query.setInt(3, professor.getRa());
-            query.setBoolean(4, professor.getAtivo());
-
-
-            query.execute();
-            query.close();
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    protected String getStringSQLCreate() {
+        return "INSERT INTO professor(nome, ra, estaAtivo) VALUES (?, ?, ?)";
     }
 
     @Override
-    public ProfessorDTO buscaProfessor(int idProfessor) {
-
-        ProfessorDTO professor = new ProfessorDTO();
-
-        sql = "SELECT * FROM professor WHERE idProfessor = " + idProfessor;
-
-        try{
-            query = conn.createStatement();
-            ResultSet rs = query.executeQuery(sql);
-
-            while(rs.next()){
-                professor.setIdProfessor(rs.getInt("idProfessor"));
-                professor.setNome(rs.getString("nome"));
-                professor.setRa(rs.getInt("ra"));
-                professor.setAtivo(rs.getBoolean( "ativo"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NomeProfessorMenor5CaracteresException e) {
-            e.printStackTrace();
-        }
-        return professor;
+    protected void mappingCreate(PreparedStatement stmt, ProfessorDTO entity) throws Exception {
+        stmt.setString(1, entity.getNome());
+        stmt.setInt(2, entity.getRa());
+        stmt.setBoolean(3, entity.getEstaAtivo());
     }
 
     @Override
-    public boolean updateProfessor(ProfessorDTO professor) {
-        sql = "UPDATE professor SET idProfessor = ?, nome = ?, telefone = ?, idade = ?, " +
-                "WHERE idProfessor = ?";
-
-        try{
-            PreparedStatement query = conn.prepareStatement(sql);
-            query.setInt(1, professor.getIdProfessor());
-            query.setString(2, professor.getNome());
-            query.setInt(3, professor.getRa());
-            query.setBoolean(4, professor.getAtivo());
-            query.setInt(5, professor.getIdProfessor());
-
-            query.execute();
-            query.close();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    protected String getStringSQLList() {
+        return "SELECT * FROM professor";
     }
 
     @Override
-    public boolean deletaProfessor(ProfessorDTO professor) {
-        sql = "DELETE FROM professor WHERE idProfessor = ?";
-
-        try{
-            PreparedStatement query = conn.prepareStatement(sql);
-            query.setInt(1, professor.getIdProfessor());
-            query.execute();
-            query.close();
-
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    protected ProfessorDTO populateList(ResultSet result) throws Exception {
+        return ProfessorDTO.builder()
+                .idProfessor(result.getInt("id"))
+                .nome(result.getString("nome"))
+                .ra(result.getInt("ra"))
+                .estaAtivo(result.getBoolean("estaAtivo"))
+                .build();
     }
 
     @Override
-    public List<ProfessorDTO> listaTodos() {
-        List<ProfessorDTO> professores = new ArrayList<ProfessorDTO>();
-        ProfessorDTO professor = new ProfessorDTO();
+    protected String getStringSQLDelete() {
+        return "DELETE FROM professor WHERE id=?";
+    }
 
-        sql = "SELECT * FROM professor";
+    @Override
+    protected String getStringSQLUpdate() {
+        return "UPDATE professor SET nome=?, ra=?, estaAtivo=? WHERE id=?";
+    }
 
-        try{
-            query = conn.createStatement();
-            ResultSet rs = query.executeQuery(sql);
-
-            while(rs.next()){
-                professor.setIdProfessor(rs.getInt("idProfessor"));
-                professor.setNome(rs.getString("nome"));
-                professor.setRa(rs.getInt("ra"));
-                professor.setAtivo(rs.getBoolean( "ativo"));
-
-
-                professores.add(professor);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NomeProfessorMenor5CaracteresException e) {
-            e.printStackTrace();
-        }
-        return professores;
+    @Override
+    protected void mappingUpdate(PreparedStatement stmt, ProfessorDTO entity) throws Exception {
+        stmt.setString(1, entity.getNome());
+        stmt.setInt(2, entity.getRa());
+        stmt.setBoolean(3, entity.getEstaAtivo());
+        stmt.setInt(4, entity.getIdProfessor());
     }
 }
